@@ -42,6 +42,16 @@ variable "private_subnet4_cidr" {
   default = "192.168.192.0/18"
 }
 
+variable "any_IP_cidr" {
+  description = "CIDR for routing to any ip 0.0.0.0/0"
+  default = "0.0.0.0/0"
+}
+
+variable "local_IP_cidr" {
+  description = "CIDR for routing to any ip 192.168.0.0/16"
+  default = "192.168.0.0/16"
+}
+
 variable "Availability_Zone_A" {
   // obtained from terraform.tfvars
 }
