@@ -1,0 +1,17 @@
+  key_name      = "my_key"
+  vpc_security_group_ids = [
+    "{your security group ip you copied earlier}",
+  ]
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update && sudo apt install nginx -y",
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = "${file("~/.ssh/id_rsa")}"
+    }
+
+  }
