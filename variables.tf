@@ -8,9 +8,15 @@ variable "aws_secret_key" {
 
 
 variable "ami" {
+  type = "map"
   description = "Debian Linux AMI"
-  default = "ami-c7ab5fa0"
+  default = {
+   instance_ami   = "ami-c7ab5fa0"
+   instance_type  = "t2.micro"
+  }
+
 }
+
 
 variable "region" {
   description = "Region for the VPC"

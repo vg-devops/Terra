@@ -6,6 +6,9 @@ provider "aws" {
 
 resource "aws_vpc" "Main_VPC" {
   cidr_block = "${var.vpc_cidr}"
+  tags {
+    Name = "Main VPC"
+  }
 }
 
 resource "aws_internet_gateway" "Main_GW" {

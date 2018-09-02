@@ -30,7 +30,7 @@ resource "aws_route_table" "private-rt" {
   }
 }
 
-resource "aws_route_table_association" "private-rt" {
-  subnet_id = "${aws_subnet.Private_Subnet3.id}"
-  route_table_id = "${aws_route_table.private-rt.id}"
-}
+//resource "aws_route_table_association" "private-rt" {
+//  subnet_id = "${aws_subnet.Private_Subnet3.id}"
+//  route_table_id = "${aws_route_table.private-rt.id}"
+//}
