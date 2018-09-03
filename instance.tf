@@ -8,25 +8,35 @@ resource "aws_network_interface" "internal_IIP" {
   }
 }
 
+resource "aws_eip" "elastip_ip" {
+  vpc = true
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = "${aws_instance.first_intance.id}"
+  allocation_id = "${aws_eip.elastip_ip.id}"
+}
+
 resource "aws_instance" "first_intance" { //debian linux defined in variables
   ami           = "${var.ami["instance_ami"]}"
   instance_type = "${var.ami["instance_type"]}" 
+  //vpc_security_group_ids = ["${aws_security_group.allow_all_in.id}"]
     network_interface {
      network_interface_id = "${aws_network_interface.internal_IIP.id}"
      device_index = 0
     }
 
-  key_name      = "my_key.pub"
+  key_name = "my_key"
   
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt update && sudo apt install nginx -y",
+      "apt update && sudo apt install nginx -y",
     ]
 
     connection {
       type        = "ssh"
-      user        = "vg-devops"
+      user        = "root"
       private_key = "${file("~/.ssh/my_key.peb")}"
     }
 
@@ -34,3 +44,17 @@ resource "aws_instance" "first_intance" { //debian linux defined in variables
 
 }
 
+
+
+resource "aws_security_group" "allow_all_in" {
+  name = "SG allow_all_in"
+  description = "default VPC security group"
+
+  # TCP access
+  ingress {
+    from_port = 0
+    to_port = 65535
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
