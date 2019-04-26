@@ -65,3 +65,8 @@ variable "Availability_Zone_A" {
 variable "Availability_Zone_B" {
   // obtained from terraform.tfvars
 }
+
+output "dns_for_instance" {
+  description = "Get public DNS name assigned to the instance"
+  value       = "${aws_instance.first_intance.public_dns}"
+}

@@ -3,7 +3,7 @@ resource "aws_subnet" "Public_Subnet1" {
 
     cidr_block = "${var.public_subnet1_cidr}"
     availability_zone = "${var.Availability_Zone_A}"
-
+    associate_public_ip_address = true
     tags {
         Name = "Public Subnet 1"
     }

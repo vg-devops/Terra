@@ -8,19 +8,21 @@ resource "aws_network_interface" "internal_IIP" {
   }
 }
 
-resource "aws_eip" "elastip_ip" {
-  vpc = true
-}
+//resource "aws_eip" "elastip_ip" {
+ // vpc = true
+//}
 
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = "${aws_instance.first_intance.id}"
-  allocation_id = "${aws_eip.elastip_ip.id}"
-}
+//resource "aws_eip_association" "eip_assoc" {
+//  instance_id   = "${aws_instance.first_intance.id}"
+ // allocation_id = "${aws_eip.elastip_ip.id}"
+//}
 
 resource "aws_instance" "first_intance" { //debian linux defined in variables
   ami           = "${var.ami["instance_ami"]}"
   instance_type = "${var.ami["instance_type"]}" 
-  //vpc_security_group_ids = ["${aws_security_group.allow_all_in.id}"]
+  
+  vpc_security_group_ids = ["${aws_security_group.allow_all_in.id}"]
+  
     network_interface {
      network_interface_id = "${aws_network_interface.internal_IIP.id}"
      device_index = 0
@@ -36,7 +38,7 @@ resource "aws_instance" "first_intance" { //debian linux defined in variables
 
     connection {
       type        = "ssh"
-      user        = "root"
+      user        = "admin"
       private_key = "${file("~/.ssh/my_key.pem")}"
     }
 
