@@ -37,7 +37,7 @@ resource "aws_instance" "first_intance" { //debian linux defined in variables
     connection {
       type        = "ssh"
       user        = "root"
-      private_key = "${file("~/.ssh/my_key.pub")}"
+      private_key = "${file("~/.ssh/my_key.pem")}"
     }
 
   }
