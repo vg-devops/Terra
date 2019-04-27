@@ -6,6 +6,10 @@ resource "aws_network_interface" "internal_IIP" {
   tags {
     Name = "primary_network_interface"
   }
+ // security_groups
+  depends_on = ["aws_security_group.allow_all_in"]
+  security_groups = ["${aws_security_group.allow_all_in.id}"]
+  //security_groups = ["${aws_security_group.web.id}"]
 }
 
 //resource "aws_eip" "elastip_ip" {
@@ -20,25 +24,25 @@ resource "aws_network_interface" "internal_IIP" {
 resource "aws_instance" "first_intance" { //debian linux defined in variables
   ami           = "${var.ami["instance_ami"]}"
   instance_type = "${var.ami["instance_type"]}" 
-  
-  vpc_security_group_ids = ["${aws_security_group.allow_all_in.id}"]
-  
     network_interface {
      network_interface_id = "${aws_network_interface.internal_IIP.id}"
      device_index = 0
-    }
-
+     }
+  //security_groups =
+  //vpc_security_group_ids = ["${aws_security_group.allow_all_in.name}"]
   key_name = "my_key"
   
-
+  tags {
+    Name = "Terraform_machine"
+  }
   provisioner "remote-exec" {
     inline = [
-      "apt update && sudo apt install nginx -y",
+      "sudo apt-get update && sudo apt-get install nginx -y",
     ]
 
     connection {
       type        = "ssh"
-      user        = "admin"
+      user        = "ubuntu"
       private_key = "${file("~/.ssh/my_key.pem")}"
     }
 
@@ -47,11 +51,10 @@ resource "aws_instance" "first_intance" { //debian linux defined in variables
 }
 
 
-
 resource "aws_security_group" "allow_all_in" {
   name = "SG allow_all_in"
-  description = "default VPC security group"
-
+  description = "Additional VPC SG with full access to/from an instance"
+  vpc_id = "${aws_vpc.Main_VPC.id}"
   # TCP access
   ingress {
     from_port = 0
@@ -59,4 +62,12 @@ resource "aws_security_group" "allow_all_in" {
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
 }
+

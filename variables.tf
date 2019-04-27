@@ -1,17 +1,17 @@
 
 variable "aws_access_key" {
-  // obtained from environment
+  // automatically obtained from environment by searching for TF_VAR_aws_access_key
 }
 variable "aws_secret_key" {
-  // obtained from environment
+  // automatically obtained from environment by searching for TF_VAR_aws_secret_key
 }
 
 
 variable "ami" {
   type = "map"
-  description = "Debian Linux AMI"
+  description = "Ubuntu 16.04 Linux AMI for eu-west-2"
   default = {
-   instance_ami   = "ami-c7ab5fa0"
+   instance_ami   = "ami-0f49c6ee8f381746f"
    instance_type  = "t2.micro"
   }
 
