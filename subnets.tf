@@ -1,28 +1,29 @@
 resource "aws_subnet" "Public_Subnet1" {
-    vpc_id = "${aws_vpc.Main_VPC.id}"
+  vpc_id = "${aws_vpc.Main_VPC.id}"
 
-    cidr_block = "${var.public_subnet1_cidr}"
-    availability_zone = "${var.Availability_Zone_A}"
-    map_public_ip_on_launch = true
-    tags {
-        Name = "Public Subnet 1"
-    }
+  cidr_block              = "${var.public_subnet1_cidr}"
+  availability_zone       = "${var.Availability_Zone_A}"
+  map_public_ip_on_launch = true
+
+  tags {
+    Name = "Public Subnet 1"
+  }
 }
 
 resource "aws_subnet" "Private_Subnet3" {
-    vpc_id = "${aws_vpc.Main_VPC.id}"
+  vpc_id = "${aws_vpc.Main_VPC.id}"
 
-    cidr_block = "${var.private_subnet3_cidr}"
-    availability_zone = "${var.Availability_Zone_B}"
-    map_public_ip_on_launch = false    
+  cidr_block              = "${var.private_subnet3_cidr}"
+  availability_zone       = "${var.Availability_Zone_B}"
+  map_public_ip_on_launch = false
 
-    tags {
-        Name = "Private Subnet 3"
-    }
+  tags {
+    Name = "Private Subnet 3"
+  }
 }
 
 resource "aws_network_acl" "main" {
-  vpc_id = "${aws_vpc.Main_VPC.id}"
+  vpc_id     = "${aws_vpc.Main_VPC.id}"
   subnet_ids = ["${aws_subnet.Public_Subnet1.id}"]
 
   egress {
